@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B62F762A1DD4C82F008DDFC7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62F76291DD4C82F008DDFC7 /* main.cpp */; };
+		B62F763B1DD4F5D8008DDFC7 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62F76351DD4CC0A008DDFC7 /* SDL2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +24,12 @@
 
 /* Begin PBXFileReference section */
 		B62F76261DD4C82F008DDFC7 /* DungeonGenerator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DungeonGenerator; sourceTree = BUILT_PRODUCTS_DIR; };
-		B62F76291DD4C82F008DDFC7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		B62F76351DD4CC0A008DDFC7 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		B62F76371DD4F55B008DDFC7 /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; path = include; sourceTree = "<group>"; };
+		B62F76381DD4F55B008DDFC7 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = "<group>"; };
+		B62F76391DD4F55B008DDFC7 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
+		B62F763A1DD4F55B008DDFC7 /* terminal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = terminal.png; sourceTree = "<group>"; };
+		B62F763C1DD4F787008DDFC7 /* build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B62F763B1DD4F5D8008DDFC7 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +49,7 @@
 			children = (
 				B62F76281DD4C82F008DDFC7 /* DungeonGenerator */,
 				B62F76271DD4C82F008DDFC7 /* Products */,
+				B62F76341DD4CC0A008DDFC7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,9 +64,21 @@
 		B62F76281DD4C82F008DDFC7 /* DungeonGenerator */ = {
 			isa = PBXGroup;
 			children = (
-				B62F76291DD4C82F008DDFC7 /* main.cpp */,
+				B62F763C1DD4F787008DDFC7 /* build.sh */,
+				B62F76371DD4F55B008DDFC7 /* include */,
+				B62F76381DD4F55B008DDFC7 /* lib */,
+				B62F76391DD4F55B008DDFC7 /* src */,
+				B62F763A1DD4F55B008DDFC7 /* terminal.png */,
 			);
 			path = DungeonGenerator;
+			sourceTree = "<group>";
+		};
+		B62F76341DD4CC0A008DDFC7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B62F76351DD4CC0A008DDFC7 /* SDL2.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,7 +138,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B62F762A1DD4C82F008DDFC7 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +234,10 @@
 		B62F762E1DD4C82F008DDFC7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -223,6 +245,10 @@
 		B62F762F1DD4C82F008DDFC7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -246,6 +272,7 @@
 				B62F762F1DD4C82F008DDFC7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
