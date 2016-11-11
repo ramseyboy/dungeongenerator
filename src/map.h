@@ -2,6 +2,7 @@
 
 #include "libtcod.hpp"
 #include "tile.h"
+#include "random.h"
 
 class Map : public ITCODBspCallback {
  public:
@@ -19,8 +20,10 @@ class Map : public ITCODBspCallback {
 
   Tile *tiles;
 
-  int roomNum = 0;       // room number
+  int roomNum = 0;   // room number
   int lastx, lasty;  // center of the last room
+
+  Random *rand;
 
   void dig(int x1, int y1, int x2, int y2);
   void createRoom(bool first, int x1, int y1, int x2, int y2);

@@ -3,12 +3,16 @@
 
 Map::Map(int width, int height) : width(width), height(height) {
   tiles = new Tile[width * height];
+  rand = new Random();
   TCODBsp bsp(0, 0, width, height);
   bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
   bsp.traverseInvertedLevelOrder(this, NULL);
 }
 
-Map::~Map() { delete[] tiles; }
+Map::~Map() {
+  delete[] tiles;
+  delete rand;
+}
 
 bool Map::isWall(int x, int y) const { return !tiles[x + y * width].canWalk; }
 
@@ -54,9 +58,8 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
     engine.player->x = (x1 + x2) / 2;
     engine.player->y = (y1 + y2) / 2;
   } else {
-    TCODRandom *rng = TCODRandom::getInstance();
-    if (rng->getInt(0, 3) == 0) {
-      engine.actors.push(
+    if (rand->generate(0, 3) == 0) {
+      engine.actors.push_back(
           new Actor((x1 + x2) / 2, (y1 + y2) / 2, '@', TCODColor::yellow));
     }
   }
@@ -66,11 +69,11 @@ bool Map::visitNode(TCODBsp *node, void *userData) {
   if (node->isLeaf()) {
     int x, y, w, h;
     // dig a room
-    TCODRandom *rng = TCODRandom::getInstance();
-    w = rng->getInt(ROOM_MIN_SIZE, node->w - 2);
-    h = rng->getInt(ROOM_MIN_SIZE, node->h - 2);
-    x = rng->getInt(node->x + 1, node->x + node->w - w - 1);
-    y = rng->getInt(node->y + 1, node->y + node->h - h - 1);
+    w = rand->generate(ROOM_MIN_SIZE, node->w - 2);
+    h = rand->generate(ROOM_MIN_SIZE, node->h - 2);
+    x = rand->generate(node->x + 1, node->x + node->w - w - 1);
+    y = rand->generate(node->y + 1, node->y + node->h - h - 1);
+
     createRoom(roomNum == 0, x, y, x + w - 1, y + h - 1);
 
     if (roomNum != 0) {
