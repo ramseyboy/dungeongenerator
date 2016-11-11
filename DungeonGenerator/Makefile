@@ -7,7 +7,7 @@ SDL_LDFLAGS := $(shell sdl2-config --libs)
 
 INCLUDE=-Iinclude
 LIB=-ltcod -ltcodxx
-SRC=src/main.cpp
+SRC=src/*.cpp
 
 all:
 	mkdir -p $(BIN)
