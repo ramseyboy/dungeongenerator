@@ -1,14 +1,14 @@
 #include "engine.h"
 
 Engine::Engine() {
-   TCODConsole::initRoot(80,50,"libtcod C++ tutorial",false);
-   player = new Actor(40,25,'@',TCODColor::white);
-   actors.push(player);
-   map = new Map(80,45);
+  TCODConsole::initRoot(80, 50, "libtcod C++ tutorial", false);
+  player = new Actor(40, 25, '@', TCODColor::white);
+  actors.push_back(player);
+  map = new Map(80, 45);
 }
 
 Engine::~Engine() {
-  actors.clearAndDelete();
+  actors.clear();
   delete map;
 }
 
@@ -46,8 +46,8 @@ void Engine::render() {
   // draw the map
   map->render();
   // draw the actors
-  for (Actor **iterator = actors.begin(); iterator != actors.end();
-       iterator++) {
-    (*iterator)->render();
+  for (std::vector<Actor *>::iterator it = actors.begin(); it != actors.end();
+       ++it) {
+    (*it)->render();
   }
 }

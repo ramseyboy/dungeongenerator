@@ -1,13 +1,13 @@
 #pragma once
 
-#include "libtcod.hpp"
+#include <vector>
 #include "actor.h"
 #include "map.h"
 
 class Engine {
  public:
   Actor *player;
-  TCODList<Actor *> actors;
+  std::vector<Actor *> actors;  
   Map *map;
 
   Engine();

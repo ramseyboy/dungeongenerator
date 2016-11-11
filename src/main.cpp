@@ -1,12 +1,12 @@
-#include "libtcod.hpp"
+#include "libtcod.h"
 #include "engine.h"
 
 Engine engine;
-int main() {
-  while (!TCODConsole::isWindowClosed()) {
+int main(int argc, char* argv[]) {
+  while (!TCOD_console_is_window_closed()) {
     engine.update();
     engine.render();
-    TCODConsole::flush();
+    TCOD_console_flush();
   }
   return 0;
 }
