@@ -1,4 +1,4 @@
-DungeonGenerator/bin/*
+bin/*
 
 # Prerequisites
 *.d

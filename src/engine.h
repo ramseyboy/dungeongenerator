@@ -6,13 +6,14 @@
 
 class Engine {
  public:
+  Actor *player;
+  TCODList<Actor *> actors;
+  Map *map;
+
   Engine();
   ~Engine();
   void update();
   void render();
-
- private:
-  TCODList<Actor *> actors;
-  Actor *player;
-  Map *map;
 };
+
+extern Engine engine;
