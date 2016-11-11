@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D2A9CF61DD542AB0044B2B4 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 5D2A9CF51DD542AB0044B2B4 /* Makefile */; };
 		B62F763B1DD4F5D8008DDFC7 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62F76351DD4CC0A008DDFC7 /* SDL2.framework */; };
 /* End PBXBuildFile section */
 
@@ -23,13 +24,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5D2A9CF51DD542AB0044B2B4 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		B62F76261DD4C82F008DDFC7 /* DungeonGenerator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DungeonGenerator; sourceTree = BUILT_PRODUCTS_DIR; };
 		B62F76351DD4CC0A008DDFC7 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		B62F76371DD4F55B008DDFC7 /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; path = include; sourceTree = "<group>"; };
-		B62F76381DD4F55B008DDFC7 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = "<group>"; };
 		B62F76391DD4F55B008DDFC7 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
 		B62F763A1DD4F55B008DDFC7 /* terminal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = terminal.png; sourceTree = "<group>"; };
-		B62F763C1DD4F787008DDFC7 /* build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,9 +64,8 @@
 		B62F76281DD4C82F008DDFC7 /* DungeonGenerator */ = {
 			isa = PBXGroup;
 			children = (
-				B62F763C1DD4F787008DDFC7 /* build.sh */,
+				5D2A9CF51DD542AB0044B2B4 /* Makefile */,
 				B62F76371DD4F55B008DDFC7 /* include */,
-				B62F76381DD4F55B008DDFC7 /* lib */,
 				B62F76391DD4F55B008DDFC7 /* src */,
 				B62F763A1DD4F55B008DDFC7 /* terminal.png */,
 			);
@@ -138,6 +137,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D2A9CF61DD542AB0044B2B4 /* Makefile in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
