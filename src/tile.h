@@ -1,6 +1,6 @@
 #pragma once
 
 struct Tile {
-  bool canWalk;  // can we walk through this tile?
-  Tile() : canWalk(false) {}
+  bool explored; // has the player already seen this tile ?
+  Tile() : explored(false) {}
 };
