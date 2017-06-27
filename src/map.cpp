@@ -1,17 +1,15 @@
 #include "map.h"
-#include <stdio.h>
 #include "engine.h"
+#include "random.h"
 
 Map::Map(int width, int height) : width(width), height(height) {
   tiles = new Tile[width * height];
-  rand = new Random();
 
   tcod_map = TCOD_map_new(width, height);
 }
 
 Map::~Map() {
   delete[] tiles;
-  delete rand;
   TCOD_map_delete(tcod_map);
 }
 
@@ -90,7 +88,7 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
     engine.player->x = (x1 + x2) / 2;
     engine.player->y = (y1 + y2) / 2;
   } else {
-    if (rand->generate(0, 3) == 0) {
+    if (generate(0, 3) == 0) {
       engine.actors.push_back(
           new Actor((x1 + x2) / 2, (y1 + y2) / 2, '@', TCOD_yellow));
     }
@@ -101,10 +99,10 @@ bool Map::visitNode(TCOD_bsp_t *node, void *userData) {
   if (TCOD_bsp_is_leaf(node)) {
     int x, y, w, h;
     // dig a room
-    w = rand->generate(ROOM_MIN_SIZE, node->w - 2);
-    h = rand->generate(ROOM_MIN_SIZE, node->h - 2);
-    x = rand->generate(node->x + 1, node->x + node->w - w - 1);
-    y = rand->generate(node->y + 1, node->y + node->h - h - 1);
+    w = generate(ROOM_MIN_SIZE, node->w - 2);
+    h = generate(ROOM_MIN_SIZE, node->h - 2);
+    x = generate(node->x + 1, node->x + node->w - w - 1);
+    y = generate(node->y + 1, node->y + node->h - h - 1);
 
     createRoom(roomNum == 0, x, y, x + w - 1, y + h - 1);
 

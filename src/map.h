@@ -1,7 +1,6 @@
 #pragma once
 
 #include "libtcod.h"
-#include "random.h"
 #include "tile.h"
 
 class Map {
@@ -29,7 +28,6 @@ class Map {
   int lastx, lasty;  // center of the last room
 
   TCOD_map_t tcod_map;
-  Random *rand;
 
   void dig(int x1, int y1, int x2, int y2);
   void createRoom(bool first, int x1, int y1, int x2, int y2);
