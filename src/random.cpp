@@ -1,5 +1,5 @@
-#include <random>
 #include "random.h"
+#include <random>
 
 int Random::generate(int lower, int upper) {
   std::random_device rd;

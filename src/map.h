@@ -1,11 +1,14 @@
 #pragma once
 
-#include "libtcod.hpp"
-#include "tile.h"
+#include "libtcod.h"
 #include "random.h"
+#include "tile.h"
 
-class Map : public ITCODBspCallback {
+class Map {
  public:
+  static const int ROOM_MAX_SIZE = 12;
+  static const int ROOM_MIN_SIZE = 6;
+
   int width, height;
 
   Map(int width, int height);
@@ -17,18 +20,15 @@ class Map : public ITCODBspCallback {
   void computeFov();
 
   void render() const;
-  bool visitNode(TCODBsp *node, void *userData);
+  bool visitNode(TCOD_bsp_t *node, void *userData);
 
  private:
-  static const int ROOM_MAX_SIZE = 12;
-  static const int ROOM_MIN_SIZE = 6;
-
   Tile *tiles;
 
   int roomNum = 0;   // room number
   int lastx, lasty;  // center of the last room
 
-  TCODMap *map;
+  TCOD_map_t tcod_map;
   Random *rand;
 
   void dig(int x1, int y1, int x2, int y2);

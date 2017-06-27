@@ -1,5 +1,5 @@
-#include "libtcod.h"
 #include "engine.h"
+#include "libtcod.h"
 
 Engine engine;
 int main(int argc, char* argv[]) {

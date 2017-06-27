@@ -1,29 +1,30 @@
 #include "map.h"
+#include <stdio.h>
 #include "engine.h"
 
 Map::Map(int width, int height) : width(width), height(height) {
   tiles = new Tile[width * height];
   rand = new Random();
-  map = new TCODMap(width, height);
-  TCODBsp bsp(0, 0, width, height);
-  bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
-  bsp.traversePreOrder(this, NULL);
+
+  tcod_map = TCOD_map_new(width, height);
 }
 
 Map::~Map() {
   delete[] tiles;
   delete rand;
-  delete map;
+  TCOD_map_delete(tcod_map);
 }
 
-bool Map::isWall(int x, int y) const { return !map->isWalkable(x, y); }
+bool Map::isWall(int x, int y) const {
+  return !TCOD_map_is_walkable(tcod_map, x, y);
+}
 
 bool Map::isExplored(int x, int y) const {
   return tiles[x + y * width].explored;
 }
 
 bool Map::isInFov(int x, int y) const {
-  if (map->isInFov(x, y)) {
+  if (TCOD_map_is_in_fov(tcod_map, x, y)) {
     tiles[x + y * width].explored = true;
     return true;
   }
@@ -31,28 +32,33 @@ bool Map::isInFov(int x, int y) const {
 }
 
 void Map::computeFov() {
-  map->computeFov(engine.player->x, engine.player->y, engine.fovRadius);
+  TCOD_map_compute_fov(tcod_map, engine.player->x, engine.player->y,
+                       engine.fovRadius, /*light walls*/ false, FOV_BASIC);
 }
 
 void Map::render() const {
-  static const TCODColor darkWall(0, 0, 100);
-  static const TCODColor darkGround(50, 50, 150);
-  static const TCODColor lightWall(130, 110, 50);
-  static const TCODColor lightGround(200, 180, 50);
+  static const TCOD_color_t darkWall = TCOD_color_RGB(0, 0, 100);
+  static const TCOD_color_t darkGround = TCOD_color_RGB(50, 50, 150);
+  static const TCOD_color_t lightWall = TCOD_color_RGB(130, 110, 50);
+  static const TCOD_color_t lightGround = TCOD_color_RGB(200, 180, 50);
 
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
       if (isInFov(x, y)) {
         if (isWall(x, y)) {
-          TCODConsole::root->setCharBackground(x, y, lightWall);
+          TCOD_console_set_char_background(NULL, x, y, lightWall,
+                                           TCOD_BKGND_SET);
         } else {
-          TCODConsole::root->setCharBackground(x, y, lightGround);
+          TCOD_console_set_char_background(NULL, x, y, lightGround,
+                                           TCOD_BKGND_SET);
         }
       } else if (isExplored(x, y)) {
         if (isWall(x, y)) {
-          TCODConsole::root->setCharBackground(x, y, darkWall);
+          TCOD_console_set_char_background(NULL, x, y, darkWall,
+                                           TCOD_BKGND_SET);
         } else {
-          TCODConsole::root->setCharBackground(x, y, darkGround);
+          TCOD_console_set_char_background(NULL, x, y, darkGround,
+                                           TCOD_BKGND_SET);
         }
       }
     }
@@ -72,7 +78,7 @@ void Map::dig(int x1, int y1, int x2, int y2) {
   }
   for (int tilex = x1; tilex <= x2; tilex++) {
     for (int tiley = y1; tiley <= y2; tiley++) {
-      map->setProperties(tilex, tiley, true, true);
+      TCOD_map_set_properties(tcod_map, tilex, tiley, true, true);
     }
   }
 }
@@ -86,13 +92,13 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
   } else {
     if (rand->generate(0, 3) == 0) {
       engine.actors.push_back(
-          new Actor((x1 + x2) / 2, (y1 + y2) / 2, '@', TCODColor::yellow));
+          new Actor((x1 + x2) / 2, (y1 + y2) / 2, '@', TCOD_yellow));
     }
   }
 }
 
-bool Map::visitNode(TCODBsp *node, void *userData) {
-  if (node->isLeaf()) {
+bool Map::visitNode(TCOD_bsp_t *node, void *userData) {
+  if (TCOD_bsp_is_leaf(node)) {
     int x, y, w, h;
     // dig a room
     w = rand->generate(ROOM_MIN_SIZE, node->w - 2);
