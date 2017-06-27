@@ -7,7 +7,8 @@ extern "C" unsigned char callback_wrapper(TCOD_bsp_t *node, void *userData) {
 
 Engine::Engine() : fovRadius(10), computeFov(true) {
   TCOD_console_init_root(80, 50, "Dungeon Generator", false, TCOD_RENDERER_SDL);
-  player = new Actor(40, 25, '@', TCOD_white);
+  
+  player = actor_new(40, 25, '@', TCOD_white);
   actors.push_back(player);
   
   map = new Map(80, 45);
@@ -70,7 +71,7 @@ void Engine::render() {
        ++it) {
     Actor *actor = *it;
     if (map->isInFov(actor->x, actor->y)) {
-      actor->render();
+      actor_render(actor);
     }
   }
 }

@@ -89,8 +89,8 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
     engine.player->y = (y1 + y2) / 2;
   } else {
     if (generate(0, 3) == 0) {
-      engine.actors.push_back(
-          new Actor((x1 + x2) / 2, (y1 + y2) / 2, '@', TCOD_yellow));
+      Actor *actor = actor_new((x1 + x2) / 2, (y1 + y2) / 2, '@', TCOD_yellow);
+      engine.actors.push_back(actor);
     }
   }
 }
