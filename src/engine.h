@@ -1,13 +1,13 @@
 #pragma once
 
-#include <vector>
+#include "vector.h"
 #include "actor.h"
 #include "map.h"
 
 class Engine {
  public:
   Actor *player;
-  std::vector<Actor *> actors;
+  Vector actors;
   Map *map;
   int fovRadius;
 

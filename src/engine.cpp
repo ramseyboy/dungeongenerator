@@ -8,7 +8,9 @@ Engine::Engine() : fovRadius(10), computeFov(true) {
   TCOD_console_init_root(80, 50, "Dungeon Generator", false, TCOD_RENDERER_SDL);
 
   player = actor_new(40, 25, '@', TCOD_white);
-  actors.push_back(player);
+  
+  vector_init(&actors);
+  vector_add(&actors, player);
 
   map = map_new(80, 45);
 
@@ -21,7 +23,7 @@ Engine::Engine() : fovRadius(10), computeFov(true) {
 }
 
 Engine::~Engine() {
-  actors.clear();
+  vector_free(&actors);
   map_delete(map);
 }
 
@@ -67,9 +69,9 @@ void Engine::render() {
   // draw the map
   map_render(map);
   // draw the actors
-  for (std::vector<Actor *>::iterator it = actors.begin(); it != actors.end();
-       ++it) {
-    Actor *actor = *it;
+  int size = vector_total(&actors);
+  for (int i = 0; i < size; i++) {
+    Actor *actor = (Actor *) vector_get(&actors, i);
     if (map_is_in_fov(map, actor->x, actor->y)) {
       actor_render(actor);
     }

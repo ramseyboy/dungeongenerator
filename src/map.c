@@ -106,7 +106,7 @@ void map_create_room(Map *map, bool first, int x1, int y1, int x2, int y2) {
   } else {
     if (generate(0, 3) == 0) {
       Actor *actor = actor_new((x1 + x2) / 2, (y1 + y2) / 2, '@', TCOD_yellow);
-      engine.actors.push_back(actor);
+      vector_add(&engine.actors, actor);
     }
   }
 }
