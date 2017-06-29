@@ -1,23 +1,21 @@
 #pragma once
 
-#include "vector.h"
 #include "actor.h"
 #include "map.h"
+#include "vector.h"
 
-class Engine {
- public:
+typedef struct Engine {
   Actor *player;
   Vector actors;
   Map *map;
   int fovRadius;
-
-  Engine();
-  ~Engine();
-  void update();
-  void render();
-
- private:
   bool computeFov;
-};
+} Engine;
+
+void engine_init();
+void engine_free();
+
+void engine_update();
+void engine_render();
 
 extern Engine engine;
