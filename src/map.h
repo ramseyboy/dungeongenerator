@@ -6,7 +6,7 @@ static const int ROOM_MAX_SIZE = 12;
 static const int ROOM_MIN_SIZE = 6;
 
 typedef struct Tile {
-  bool explored = false;  // has the player already seen this tile ?
+  bool explored;  // has the player already seen this tile ?
 } Tile;
 
 typedef struct Map {
@@ -14,8 +14,8 @@ typedef struct Map {
 
   Tile *tiles;
 
-  int roomNum = 0;   // room number
-  int lastx, lasty = 0;  // center of the last room
+  int roomNum;   // room number
+  int lastx, lasty;  // center of the last room
 
   TCOD_map_t tcod_map;
 } Map;

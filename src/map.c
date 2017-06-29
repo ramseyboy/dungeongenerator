@@ -6,6 +6,10 @@ Map *map_new(int width, int height) {
   Map *map;
   map = (Map *)malloc(sizeof(*map));
 
+  map->roomNum = 0;
+  map->lastx = 0;
+  map->lasty = 0;
+
   map->width = width;
   map->height = height;
 
@@ -51,10 +55,10 @@ void map_compute_fov(Map *map) {
 }
 
 void map_render(Map *map) {
-  static const TCOD_color_t darkWall = TCOD_color_RGB(0, 0, 100);
-  static const TCOD_color_t darkGround = TCOD_color_RGB(50, 50, 150);
-  static const TCOD_color_t lightWall = TCOD_color_RGB(130, 110, 50);
-  static const TCOD_color_t lightGround = TCOD_color_RGB(200, 180, 50);
+  const TCOD_color_t darkWall = TCOD_color_RGB(0, 0, 100);
+  const TCOD_color_t darkGround = TCOD_color_RGB(50, 50, 150);
+  const TCOD_color_t lightWall = TCOD_color_RGB(130, 110, 50);
+  const TCOD_color_t lightGround = TCOD_color_RGB(200, 180, 50);
 
   for (int x = 0; x < map->width; x++) {
     for (int y = 0; y < map->height; y++) {

@@ -1,6 +1,6 @@
 #include "engine.h"
 
-extern "C" unsigned char callback_wrapper(TCOD_bsp_t *node, void *userData) {
+bool callback_wrapper(TCOD_bsp_t *node, void *userData) {
   return map_visitNode(engine.map, node, userData);
 }
 

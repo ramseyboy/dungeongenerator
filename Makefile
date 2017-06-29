@@ -1,5 +1,5 @@
-CXX=clang++
-CXXFLAGS=-std=c++11 -stdlib=libc++ -Wall
+C=clang
+CFLAGS=-std=c99 -Wall
 BIN=bin
 
 SDL_CFLAGS := $(shell sdl2-config --cflags)
@@ -7,11 +7,11 @@ SDL_LDFLAGS := $(shell sdl2-config --libs)
 
 INCLUDE=-Iinclude
 LIB=-ltcod -ltcodxx
-SRC=src/*.cpp src/*.c
+SRC=src/*.c
 
 all:
 	mkdir -p $(BIN)
-	$(CXX) $(CXXFLAGS) $(SDL_CFLAGS) $(SDL_LDFLAGS) -o $(BIN)/gen $(INCLUDE) -L. $(LIB) $(SRC)
+	$(C) $(CFLAGS) $(SDL_CFLAGS) $(SDL_LDFLAGS) -o $(BIN)/gen $(INCLUDE) -L. $(LIB) $(SRC)
 
 run:
 	./$(BIN)/gen
