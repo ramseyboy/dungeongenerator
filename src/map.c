@@ -2,56 +2,72 @@
 #include "engine.h"
 #include "random.h"
 
-Map::Map(int width, int height) : width(width), height(height) {
-  tiles = new Tile[width * height];
+Map *map_new(int width, int height) {
+  Map *map;
+  map = (Map *)malloc(sizeof(*map));
 
-  tcod_map = TCOD_map_new(width, height);
+  map->width = width;
+  map->height = height;
+
+  int length = width * height;
+  Tile *tiles = (Tile *)malloc(length * sizeof(Tile));
+
+  for (int i = 0; i < length; i++) {
+    tiles[i].explored = false;
+  }
+
+  map->tiles = tiles;
+
+  map->tcod_map = TCOD_map_new(width, height);
+
+  return map;
 }
 
-Map::~Map() {
-  delete[] tiles;
-  TCOD_map_delete(tcod_map);
+void map_delete(Map *map) {
+  free(map->tiles);
+  TCOD_map_delete(map->tcod_map);
+  free(map);
 }
 
-bool Map::isWall(int x, int y) const {
-  return !TCOD_map_is_walkable(tcod_map, x, y);
+bool map_is_wall(Map *map, int x, int y) {
+  return !TCOD_map_is_walkable(map->tcod_map, x, y);
 }
 
-bool Map::isExplored(int x, int y) const {
-  return tiles[x + y * width].explored;
+bool map_is_explored(Map *map, int x, int y) {
+  return map->tiles[x + y * map->width].explored;
 }
 
-bool Map::isInFov(int x, int y) const {
-  if (TCOD_map_is_in_fov(tcod_map, x, y)) {
-    tiles[x + y * width].explored = true;
+bool map_is_in_fov(Map *map, int x, int y) {
+  if (TCOD_map_is_in_fov(map->tcod_map, x, y)) {
+    map->tiles[x + y * map->width].explored = true;
     return true;
   }
   return false;
 }
 
-void Map::computeFov() {
-  TCOD_map_compute_fov(tcod_map, engine.player->x, engine.player->y,
+void map_compute_fov(Map *map) {
+  TCOD_map_compute_fov(map->tcod_map, engine.player->x, engine.player->y,
                        engine.fovRadius, /*light walls*/ false, FOV_BASIC);
 }
 
-void Map::render() const {
+void map_render(Map *map) {
   static const TCOD_color_t darkWall = TCOD_color_RGB(0, 0, 100);
   static const TCOD_color_t darkGround = TCOD_color_RGB(50, 50, 150);
   static const TCOD_color_t lightWall = TCOD_color_RGB(130, 110, 50);
   static const TCOD_color_t lightGround = TCOD_color_RGB(200, 180, 50);
 
-  for (int x = 0; x < width; x++) {
-    for (int y = 0; y < height; y++) {
-      if (isInFov(x, y)) {
-        if (isWall(x, y)) {
+  for (int x = 0; x < map->width; x++) {
+    for (int y = 0; y < map->height; y++) {
+      if (map_is_in_fov(map, x, y)) {
+        if (map_is_wall(map, x, y)) {
           TCOD_console_set_char_background(NULL, x, y, lightWall,
                                            TCOD_BKGND_SET);
         } else {
           TCOD_console_set_char_background(NULL, x, y, lightGround,
                                            TCOD_BKGND_SET);
         }
-      } else if (isExplored(x, y)) {
-        if (isWall(x, y)) {
+      } else if (map_is_explored(map, x, y)) {
+        if (map_is_wall(map, x, y)) {
           TCOD_console_set_char_background(NULL, x, y, darkWall,
                                            TCOD_BKGND_SET);
         } else {
@@ -63,7 +79,7 @@ void Map::render() const {
   }
 }
 
-void Map::dig(int x1, int y1, int x2, int y2) {
+void map_dig(Map *map, int x1, int y1, int x2, int y2) {
   if (x2 < x1) {
     int tmp = x2;
     x2 = x1;
@@ -76,13 +92,13 @@ void Map::dig(int x1, int y1, int x2, int y2) {
   }
   for (int tilex = x1; tilex <= x2; tilex++) {
     for (int tiley = y1; tiley <= y2; tiley++) {
-      TCOD_map_set_properties(tcod_map, tilex, tiley, true, true);
+      TCOD_map_set_properties(map->tcod_map, tilex, tiley, true, true);
     }
   }
 }
 
-void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
-  dig(x1, y1, x2, y2);
+void map_create_room(Map *map, bool first, int x1, int y1, int x2, int y2) {
+  map_dig(map, x1, y1, x2, y2);
   if (first) {
     // put the player in the first room
     engine.player->x = (x1 + x2) / 2;
@@ -95,7 +111,7 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
   }
 }
 
-bool Map::visitNode(TCOD_bsp_t *node, void *userData) {
+bool map_visitNode(Map *map, TCOD_bsp_t *node, void *userData) {
   if (TCOD_bsp_is_leaf(node)) {
     int x, y, w, h;
     // dig a room
@@ -104,16 +120,16 @@ bool Map::visitNode(TCOD_bsp_t *node, void *userData) {
     x = generate(node->x + 1, node->x + node->w - w - 1);
     y = generate(node->y + 1, node->y + node->h - h - 1);
 
-    createRoom(roomNum == 0, x, y, x + w - 1, y + h - 1);
+    map_create_room(map, map->roomNum == 0, x, y, x + w - 1, y + h - 1);
 
-    if (roomNum != 0) {
+    if (map->roomNum != 0) {
       // dig a corridor from last room
-      dig(lastx, lasty, x + w / 2, lasty);
-      dig(x + w / 2, lasty, x + w / 2, y + h / 2);
+      map_dig(map, map->lastx, map->lasty, x + w / 2, map->lasty);
+      map_dig(map, x + w / 2, map->lasty, x + w / 2, y + h / 2);
     }
-    lastx = x + w / 2;
-    lasty = y + h / 2;
-    roomNum++;
+    map->lastx = x + w / 2;
+    map->lasty = y + h / 2;
+    map->roomNum++;
   }
   return true;
 }
