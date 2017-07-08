@@ -81,3 +81,11 @@ void engine_render() {
     }
   }
 }
+
+bool is_window_closed() {
+  return TCOD_console_is_window_closed();
+}
+
+void flush() {
+  TCOD_console_flush();
+}

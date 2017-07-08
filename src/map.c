@@ -1,6 +1,7 @@
 #include "map.h"
 #include "engine.h"
-#include "random.h"
+
+int generate(int lower, int upper);
 
 Map *map_new(int width, int height) {
   Map *map;

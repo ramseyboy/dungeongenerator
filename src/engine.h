@@ -18,4 +18,7 @@ void engine_free();
 void engine_update();
 void engine_render();
 
+bool is_window_closed();
+void flush();
+
 extern Engine engine;

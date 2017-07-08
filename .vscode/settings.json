@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "libtcod_int.h": "c",
+        "map.h": "c",
+        "console.h": "c",
+        "bsp.h": "c"
+    }
+}

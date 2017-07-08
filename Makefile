@@ -1,20 +1,25 @@
-C=clang
 CFLAGS=-std=c99 -Wall
+DFLAGS=-betterC
 BIN=bin
+ARTIFACT=dungen
+OUT=$(BIN)/out
 
 SDL_CFLAGS := $(shell sdl2-config --cflags)
 SDL_LDFLAGS := $(shell sdl2-config --libs)
 
 INCLUDE=-Iinclude
-LIB=-ltcod -ltcodxx
-SRC=src/*.c
+LIB= -L. -ltcod -ltcodxx -L/Library/D/dmd/lib/ -lphobos2 -pthread
+C_SRC=src/*.c
+D_SRC=src/*.d
+
 
 all:
-	mkdir -p $(BIN)
-	$(C) $(CFLAGS) $(SDL_CFLAGS) $(SDL_LDFLAGS) -o $(BIN)/gen $(INCLUDE) -L. $(LIB) $(SRC)
+	mkdir -p $(OUT)
+	dmd $(DFLAGS) -c -od=$(OUT) $(D_SRC)
+	clang $(CFLAGS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(INCLUDE) $(LIB) $(C_SRC) $(OUT)/random.o -o $(BIN)/$(ARTIFACT)
 
 run:
-	./$(BIN)/gen
+	./$(BIN)/$(ARTIFACT)
 
 clean:
 	rm -r $(BIN)
